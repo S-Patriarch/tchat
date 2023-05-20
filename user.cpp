@@ -5,8 +5,8 @@
  */
 
 #include "user.h"
-#include "/ptl/ptype.h"
-#include "/ptl/pcolor.h"
+#include "/home/chaos/c++/ptl/ptype.h"
+#include "/home/chaos/c++/ptl/pcolor.h"
 #include <iostream>
 #include <string>
 
@@ -29,8 +29,17 @@ namespace chat
     std::cout
       << __c.esc_tb(7)
       << _M_name
-      << __c.esc_c()
-      << ": ";
+      << __c.esc_c();
+  }
+
+  auto
+  User::record_message(const std::string& __whom, 
+                       const std::string& __what) -> void
+  {
+    __msg[_M_msg_quantity]._S_name = __whom;
+    __msg[_M_msg_quantity]._S_msg  = __what;
+
+    ++_M_msg_quantity;
   }
 
 } // namespace chat

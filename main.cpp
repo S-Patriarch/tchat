@@ -9,10 +9,10 @@
  */
 
 #include "user.h"
-#include "/ptl/ptype.h"
-#include "/ptl/pconio.h"
-#include "/ptl/pcolor.h"
-#include "/ptl/pvector.h"
+#include "/home/chaos/c++/ptl/ptype.h"
+#include "/home/chaos/c++/ptl/pconio.h"
+#include "/home/chaos/c++/ptl/pcolor.h"
+#include "/home/chaos/c++/ptl/pvector.h"
 #include <iostream>
 #include <exception>
 #include <string>
@@ -50,6 +50,19 @@ main() -> int
       __user[chat::ID].set_user("Patriarh", "apsk0529-2@mail.ru", 
                                 "QQqq1122+", chat::ID+1);
 
+
+      __user.resize(__user.size() + 1);
+      chat::ID = __user.size();
+      __user[chat::ID-1].set_user("Chaos", "apsk0529@mail.ru", 
+                                  "ZZzz1122+", chat::ID);
+
+
+      __user.resize(__user.size() + 1);
+      chat::ID = __user.size();
+      __user[chat::ID-1].set_user("Alex", "Alex", 
+                                  "Alex", chat::ID);
+
+
       /** Запускаем процедуру авторизации / регистрации пользователя.
        */
       ::user_authorization(__user);
@@ -67,7 +80,23 @@ main() -> int
 
       __user[chat::ID-1].out_user_name();
 
+//-------------------------------------------------------
 
+
+std::string __whom{ };
+std::cout << "\nк: ";
+std::cin.clear();
+std::cin >> __whom;
+
+std::string __what{ };
+std::cout << "ч: ";
+std::cin.clear();
+std::cin >> __what;
+
+//__user.record_message(__whom, __what);
+
+
+//-------------------------------------------------------
 
       std::cout << std::endl << std::endl;
     }
@@ -94,8 +123,8 @@ get_info() -> void
     << "chat 1.0 Терминальный (консольный) чат.\n"
     << "Использование:\n"
     << "User:\n"
-    << "[имя пользователя] или [управляющий параметр]\n"
-    << "[сообщение для пользователя]\n\n"
+    << "к: [имя пользователя] или [управляющий параметр]\n"
+    << "ч: [сообщение для пользователя]\n\n"
     << "Управляющие параметры:\n"
     << "  -h, -?  вызов информации о параметрах чата\n"
     << "  -q      завершить работу чата\n"

@@ -9,7 +9,7 @@
 #ifndef _CHAT_CST
 #define _CHAT_CST 1
 
-#include "/ptl/ptype.h"
+#include "/home/chaos/c++/ptl/ptype.h"
 
 namespace chat
 {

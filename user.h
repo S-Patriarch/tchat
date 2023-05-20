@@ -60,10 +60,23 @@ namespace chat
     get_user_id() -> ptl::__u32
     { return _M_id; }
 
+    auto
+    set_msg_quantity(ptl::__u16 __quantity) -> void
+    { _M_msg_quantity = __quantity; }
+
+    auto
+    get_msg_quantity() -> ptl::__u16
+    { return _M_msg_quantity; }
+
     /** Выводит в терминал (консоль) имя пользователя.
      */
     auto
     out_user_name() -> void;
+
+    /** Записывает посланное __whom сообщение __what.
+     */
+    auto
+    record_message(const std::string&, const std::string&) -> void;
   };
 
 } // namespace chat 
