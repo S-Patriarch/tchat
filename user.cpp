@@ -42,4 +42,21 @@ namespace chat
     ++_M_msg_quantity;
   }
 
+  auto
+  User::out_message() -> void
+{
+    ptl::pcolor __c;
+
+    for (ptl::__u16 __index{0}; __index < _M_msg_quantity; ++__index)
+      {
+        std::cout
+          << __c.esc_tb(6)
+          << __msg[__index]._S_name
+          << __c.esc_c()
+          << ": "
+          << __msg[__index]._S_msg
+          << std::endl;
+      }
+  }
+
 } // namespace chat

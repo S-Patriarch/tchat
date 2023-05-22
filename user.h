@@ -77,6 +77,11 @@ namespace chat
      */
     auto
     record_message(const std::string&, const std::string&) -> void;
+
+    /** Вывод входящих сообщение.
+     */
+    auto
+    out_message() -> void;
   };
 
 } // namespace chat 
