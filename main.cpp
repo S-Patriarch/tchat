@@ -28,6 +28,8 @@ auto
 user_authorization(ptl::pvector<chat::User>&) -> void;
 auto
 check_out_message(ptl::pvector<chat::User>&) -> void;
+auto
+in_record_message(ptl::pvector<chat::User>&) -> void;
 
 /*
  * Точка входа...
@@ -83,21 +85,10 @@ main() -> int
         << std::endl;
 
 //-------------------------------------------------------
-// Вывод входящих сообщений
-//
-//std::cout
-//  << __c.esc_tb(2)
-//  << "chat"
-//  << __c.esc_c()
-//  << ": Для вас есть сообщения..."
-//  << std::endl;
+// Тестовое формирование сообщений
 //
 __user[2].record_message("Chaos", "Это пробное сообщение");
 __user[2].record_message("Patriarch", "Привет. Еще одно сообщение.");
-//__user[2].out_message();
-//__user[2].clear_msg_quantity();
-//
-//std::cout << std::endl;
 //
 //
 //-------------------------------------------------------
@@ -108,41 +99,7 @@ __user[2].record_message("Patriarch", "Привет. Еще одно сообщ�
 
       __user[chat::ID-1].out_user_name();
 
-//-------------------------------------------------------
-// Запись сообщения
-//
-std::string __whom{ };
-std::cout << "\nк: ";
-std::cin.clear();
-std::cin >> __whom;
-
-std::string __what{ };
-std::cout << "ч: ";
-std::cin.clear();
-std::cin >> __what;
-
-//__user.record_message(__whom, __what);
-
-/** Проверка введенного логина на наличие.
- */
-for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
-  {
-    bool __flag{ false };
-    if (__user[__i].get_user_name() == __whom)
-      {
-        __user[__i].record_message(__user[chat::ID-1].get_user_name(), __what);
-
-
-        //chat::ID = __user[__i].get_user_id();
-        __flag   = true;
-      }
-    if (__flag) break;
-  }
-
-
-//
-//
-//-------------------------------------------------------
+      ::in_record_message(__user);
 
       std::cout << std::endl << std::endl;
     }
@@ -371,5 +328,37 @@ check_out_message(ptl::pvector<chat::User>& __user) -> void
         << __c.esc_c()
         << ": Для вас нет сообщений..."
         << std::endl;
+    }
+}
+
+/*
+ * Функция запрашивает для кого сообщение, само сообщение и
+ * пулученную информацию отписывает пользователю для
+ * которого она предназначена.
+ */
+auto
+in_record_message(ptl::pvector<chat::User>& __user) -> void
+{
+  std::string __whom{ };
+  std::cout << "\nк: ";
+  std::cin.clear();
+  std::cin >> __whom;
+
+  std::string __what{ };
+  std::cout << "ч: ";
+  std::cin.clear();
+  std::cin >> __what;
+
+  /** Проверка логина и запись сообщения.
+   */
+  for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+    {
+      bool __flag{ false };
+      if (__user[__i].get_user_name() == __whom)
+        {
+          __user[__i].record_message(__user[__i].get_user_name(), __what);
+          __flag   = true;
+        }
+      if (__flag) break;
     }
 }
