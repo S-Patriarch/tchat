@@ -26,6 +26,8 @@ auto
 get_info() -> void;
 auto
 user_authorization(ptl::pvector<chat::User>&) -> void;
+auto
+check_out_message(ptl::pvector<chat::User>&) -> void;
 
 /*
  * Точка входа...
@@ -47,7 +49,7 @@ main() -> int
 
       /** Добавляем одного (первого) пользователя с ID:1, чтоб был.
        */
-      __user[chat::ID].set_user("Patriarh", "apsk0529-2@mail.ru", 
+      __user[chat::ID].set_user("Patriarch", "apsk0529-2@mail.ru", 
                                 "QQqq1122+", chat::ID+1);
 
 
@@ -75,14 +77,40 @@ main() -> int
         << __c.esc_tb(2)
         << "chat"
         << __c.esc_c()
-        << ": Добро пожаловать...\n"
+        << ": Добро пожаловать "
+        << __user[chat::ID-1].get_user_name()
+        << "..."
         << std::endl;
+
+//-------------------------------------------------------
+// Вывод входящих сообщений
+//
+//std::cout
+//  << __c.esc_tb(2)
+//  << "chat"
+//  << __c.esc_c()
+//  << ": Для вас есть сообщения..."
+//  << std::endl;
+//
+__user[2].record_message("Chaos", "Это пробное сообщение");
+__user[2].record_message("Patriarch", "Привет. Еще одно сообщение.");
+//__user[2].out_message();
+//__user[2].clear_msg_quantity();
+//
+//std::cout << std::endl;
+//
+//
+//-------------------------------------------------------
+
+      ::check_out_message(__user);
+
+      std::cout << std::endl;
 
       __user[chat::ID-1].out_user_name();
 
 //-------------------------------------------------------
-
-
+// Запись сообщения
+//
 std::string __whom{ };
 std::cout << "\nк: ";
 std::cin.clear();
@@ -95,7 +123,25 @@ std::cin >> __what;
 
 //__user.record_message(__whom, __what);
 
+/** Проверка введенного логина на наличие.
+ */
+for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+  {
+    bool __flag{ false };
+    if (__user[__i].get_user_name() == __whom)
+      {
+        __user[__i].record_message(__user[chat::ID-1].get_user_name(), __what);
 
+
+        //chat::ID = __user[__i].get_user_id();
+        __flag   = true;
+      }
+    if (__flag) break;
+  }
+
+
+//
+//
 //-------------------------------------------------------
 
       std::cout << std::endl << std::endl;
@@ -293,5 +339,37 @@ user_authorization(ptl::pvector<chat::User>& __user) -> void
       __user.resize(__user.size() + 1);
       chat::ID = __user.size();
       __user[chat::ID-1].set_user(__name, __login, __password, chat::ID);
+    }
+}
+
+/*
+ * Функция проверяет наличие сообщений для авторизованного 
+ * пользователя и при их наличии выводит в терминал.
+ */
+auto
+check_out_message(ptl::pvector<chat::User>& __user) -> void
+{
+  ptl::pcolor __c;
+
+  if (__user[chat::ID-1].get_msg_quantity() != 0)
+    {
+      std::cout
+        << __c.esc_tb(2)
+        << "chat"
+        << __c.esc_c()
+        << ": Для вас есть сообщения..."
+        << std::endl;
+
+      __user[chat::ID-1].out_message();
+      __user[chat::ID-1].clear_msg_quantity();
+    }
+  else
+    {
+      std::cout
+        << __c.esc_tb(2)
+        << "chat"
+        << __c.esc_c()
+        << ": Для вас нет сообщений..."
+        << std::endl;
     }
 }
