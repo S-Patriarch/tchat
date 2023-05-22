@@ -68,6 +68,10 @@ namespace chat
     get_msg_quantity() -> ptl::__u16
     { return _M_msg_quantity; }
 
+    auto
+    clear_msg_quantity() -> void
+    { _M_msg_quantity = 0; }
+
     /** Выводит в терминал (консоль) имя пользователя.
      */
     auto
