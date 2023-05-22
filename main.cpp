@@ -31,7 +31,8 @@ namespace chat
   check_out_message(ptl::pvector<chat::User>&) -> void;
   auto
   in_record_message(ptl::pvector<chat::User>&) -> void;
-} // namespace chat
+
+} // namespace chat 
 
 /*
  * Точка входа...
