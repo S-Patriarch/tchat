@@ -16,6 +16,7 @@
 #include <iostream>
 #include <exception>
 #include <string>
+#include <cstdlib>
 
 namespace chat
 {
@@ -57,18 +58,20 @@ main() -> int
       __user[chat::ID].set_user("Patriarch", "apsk0529-2@mail.ru", 
                                 "QQqq1122+", chat::ID+1);
 
-
-      __user.resize(__user.size() + 1);
-      chat::ID = __user.size();
-      __user[chat::ID-1].set_user("Chaos", "apsk0529@mail.ru", 
-                                  "ZZzz1122+", chat::ID);
-
-
-      __user.resize(__user.size() + 1);
-      chat::ID = __user.size();
-      __user[chat::ID-1].set_user("Alex", "Alex", 
-                                  "Alex", chat::ID);
-
+//-------------------------------------------------------
+// Ручное формирование хранилища пользователей
+//
+__user.resize(__user.size() + 1);
+chat::ID = __user.size();
+__user[chat::ID-1].set_user("Chaos", "apsk0529@mail.ru", 
+                            "ZZzz1122+", chat::ID);
+__user.resize(__user.size() + 1);
+chat::ID = __user.size();
+__user[chat::ID-1].set_user("Alex", "Alex", 
+                            "Alex", chat::ID);
+//
+//
+//-------------------------------------------------------
 
       /** Запускаем процедуру авторизации / регистрации пользователя.
        */
@@ -88,7 +91,7 @@ main() -> int
         << std::endl;
 
 //-------------------------------------------------------
-// Тестовое формирование сообщений
+// Ручное формирование сообщений
 //
 __user[2].record_message("Chaos", "Это пробное сообщение");
 __user[2].record_message("Patriarch", "Привет. Еще одно сообщение.");
@@ -96,13 +99,15 @@ __user[2].record_message("Patriarch", "Привет. Еще одно сообщ�
 //
 //-------------------------------------------------------
 
-      chat::check_out_message(__user);
-
-      std::cout << std::endl;
-
-      __user[chat::ID-1].out_user_name();
-
-      chat::in_record_message(__user);
+      bool __flag{ true };
+      do
+        {
+          std::cout << std::endl;
+          chat::check_out_message(__user);
+          __user[chat::ID-1].out_user_name();
+          chat::in_record_message(__user);
+        }
+      while (__flag);
 
       std::cout << std::endl << std::endl;
     }
@@ -344,10 +349,26 @@ namespace chat
   auto
   in_record_message(ptl::pvector<chat::User>& __user) -> void
   {
+    ptl::pcolor __c;
+
     std::string __whom{ };
     std::cout << "\nк: ";
     std::cin.clear();
     std::cin >> __whom;
+
+    /** Проверка на ввод управляющего параметра
+     */
+    if (__whom == "-q")
+      {
+        std::cout << std::endl;
+        std::cout
+          << __c.esc_tb(2)
+          << "chat"
+          << __c.esc_c()
+          << ": До новых встреч..."
+          << std::endl;
+        exit(0);
+      }
 
     std::string __what{ };
     std::cout << "ч: ";
@@ -366,6 +387,8 @@ namespace chat
           }
         if (__flag) break;
       }
+
+    std::cin.ignore(INT_MAX, '\n');
   }
 
 } // namespace chat
