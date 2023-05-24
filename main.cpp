@@ -63,12 +63,10 @@ main() -> int
 //
 __user.resize(__user.size() + 1);
 chat::ID = __user.size();
-__user[chat::ID-1].set_user("Chaos", "apsk0529@mail.ru", 
-                            "ZZzz1122+", chat::ID);
+__user[chat::ID-1].set_user("Chaos", "apsk0529@mail.ru", "ZZzz1122+", chat::ID);
 __user.resize(__user.size() + 1);
 chat::ID = __user.size();
-__user[chat::ID-1].set_user("Alex", "Alex", 
-                            "Alex", chat::ID);
+__user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
 //
 //
 //-------------------------------------------------------
@@ -133,16 +131,17 @@ namespace chat
     ptl::clear();
 
     std::cout
-      << "chat 1.0 Терминальный (консольный) чат.\n"
+      << "tchat 1.0 Терминальный чат.\n"
       << "Использование:\n"
-      << "User:\n"
+      << "User\n"
       << "к: [имя пользователя] или [управляющий параметр]\n"
       << "ч: [сообщение для пользователя]\n\n"
       << "Управляющие параметры:\n"
-      << "  -h, -?  вызов информации о параметрах чата\n"
+      << "  --all   сообщение для всех пользователей чата\n"
+      << "  -c      сменить пользователя чата\n"
       << "  -q      завершить работу чата\n"
-      << "  -c      сменить пользователя\n"
-      << "  -e      редактировать данные пользователя\n"
+      //<< "  -e      редактировать данные пользователя чата\n"
+      //<< "  -h, -?  вызов информации о параметрах чата\n"
       << std::endl;
   }
 
@@ -351,14 +350,14 @@ namespace chat
   {
     ptl::pcolor __c;
 
-    std::string __whom{ };
+    std::string __whom{ }; // Кому предназначено сообщение
     std::cout << "\nк: ";
     std::cin.clear();
     std::cin >> __whom;
 
-    /** Проверка на ввод управляющего параметра
+    /** Обработка введенных управляющих параметров.
      */
-    if (__whom == "-q")
+    if (__whom == "-q") // Завершение работы чата
       {
         std::cout << std::endl;
         std::cout
@@ -369,23 +368,62 @@ namespace chat
           << std::endl;
         exit(0);
       }
+    else if (__whom == "-c") // Смена пользователя
+      {
+        chat::get_info();
 
-    std::string __what{ };
+        /** Запускаем процедуру авторизации / регистрации пользователя.
+         */
+        chat::user_authorization(__user);
+
+        /** Приглашаем авторизовавшегося / зарегистрировавшегося 
+         *  пользователя к дальнейшей работе в чате.
+         */      
+        chat::get_info();
+        std::cout
+          << __c.esc_tb(2)
+          << "chat"
+          << __c.esc_c()
+          << ": Добро пожаловать "
+          << __user[chat::ID-1].get_user_name()
+          << "..."
+          << std::endl;
+
+          std::cout << std::endl;
+          chat::check_out_message(__user);
+          __user[chat::ID-1].out_user_name();
+          chat::in_record_message(__user);
+      }
+
+    std::string __what{ }; // Текст сообщения
     std::cout << "ч: ";
     std::cin.clear();
     std::cin >> __what;
 
     /** Проверка логина и запись сообщения.
      */
-    for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+    if (__whom == "--all")
       {
-        bool __flag{ false };
-        if (__user[__i].get_user_name() == __whom)
+        for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
           {
-            __user[__i].record_message(__user[__i].get_user_name(), __what);
-            __flag = true;
+            if (__user[__i].get_user_name() != __user[chat::ID-1].get_user_name())
+              __user[__i].record_message(__user[chat::ID-1].get_user_name(), 
+                                         __what);
           }
-        if (__flag) break;
+      }
+    else 
+      {
+        for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+          {
+            bool __flag{ false };
+            if (__user[__i].get_user_name() == __whom)
+              {
+                __user[__i].record_message(__user[chat::ID-1].get_user_name(), 
+                                           __what);
+                __flag = true;
+              }
+            if (__flag) break;
+          }
       }
 
     std::cin.ignore(INT_MAX, '\n');
