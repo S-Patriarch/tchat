@@ -126,7 +126,8 @@ __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
 
           if (__parametr == chat::_Change) // Смена пользователя
             {
-
+              ptl::clear();
+              chat::user_authorization(__user);
             }
 
           if (__parametr == chat::_Help) // Помощь
@@ -370,6 +371,8 @@ namespace chat
    * Функция запрашивает для кого сообщение, само сообщение и
    * пулученную информацию отписывает пользователю для
    * которого она предназначена.
+   * Возвращает chat::_Ok при нормальном завершении работы или
+   * один из управляющих параметров.
    */
   auto
   in_record_message(ptl::pvector<chat::User>& __user) -> ptl::__u16
