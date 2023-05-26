@@ -7,8 +7,9 @@
  * работу с пользователем чата.
  */
 
+#pragma once
 #ifndef _CHAT_USER
-#define _CHAT_USER 1
+#define _CHAT_USER
 
 #include "cst.h"
 #include <string>
