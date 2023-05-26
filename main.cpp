@@ -8,6 +8,7 @@
  * Терминальный (консольный) чат.
  */
 
+#include "cst.h"
 #include "user.h"
 #include "/home/chaos/c++/ptl/ptype.h"
 #include "/home/chaos/c++/ptl/pconio.h"
@@ -17,6 +18,7 @@
 #include <exception>
 #include <string>
 #include <cstdlib>
+#include <climits>
 
 namespace chat
 {
@@ -31,7 +33,7 @@ namespace chat
   auto
   check_out_message(ptl::pvector<chat::User>&) -> void;
   auto
-  in_record_message(ptl::pvector<chat::User>&) -> void;
+  in_record_message(ptl::pvector<chat::User>&) -> ptl::__u16;
 
 } // namespace chat 
 
@@ -55,15 +57,15 @@ main() -> int
 
       /** Добавляем одного (первого) пользователя с ID:1, чтоб был.
        */
-      __user[chat::ID].set_user("Patriarch", "apsk0529-2@mail.ru", 
-                                "QQqq1122+", chat::ID+1);
+      __user[chat::ID].set_user("Patriarch", "Patriarch", 
+                                "Patriarch", chat::ID+1);
 
 //-------------------------------------------------------
 // Ручное формирование хранилища пользователей
 //
 __user.resize(__user.size() + 1);
 chat::ID = __user.size();
-__user[chat::ID-1].set_user("Chaos", "apsk0529@mail.ru", "ZZzz1122+", chat::ID);
+__user[chat::ID-1].set_user("Chaos", "Chaos", "Chaos", chat::ID);
 __user.resize(__user.size() + 1);
 chat::ID = __user.size();
 __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
@@ -71,43 +73,69 @@ __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
 //
 //-------------------------------------------------------
 
+      ptl::clear();
+      chat::get_info();
+
       /** Запускаем процедуру авторизации / регистрации пользователя.
        */
       chat::user_authorization(__user);
 
-      /** Приглашаем авторизовавшегося / зарегистрировавшегося 
-       *  пользователя к дальнейшей работе в чате.
-       */      
-      chat::get_info();
-      std::cout
-        << __c.esc_tb(2)
-        << "chat"
-        << __c.esc_c()
-        << ": Добро пожаловать "
-        << __user[chat::ID-1].get_user_name()
-        << "..."
-        << std::endl;
-
-//-------------------------------------------------------
-// Ручное формирование сообщений
-//
-__user[2].record_message("Chaos", "Это пробное сообщение");
-__user[2].record_message("Patriarch", "Привет. Еще одно сообщение.");
-//
-//
-//-------------------------------------------------------
-
       bool __flag{ true };
-      do
-        {
-          std::cout << std::endl;
-          chat::check_out_message(__user);
-          __user[chat::ID-1].out_user_name();
-          chat::in_record_message(__user);
-        }
-      while (__flag);
+      ptl::__u16 __parametr{ chat::_Ok };
 
-      std::cout << std::endl << std::endl;
+      while (__flag)
+        {
+          /** Приглашаем авторизовавшегося / зарегистрировавшегося 
+           *  пользователя к дальнейшей работе в чате.
+           */
+
+          if (__parametr != chat::_Help)
+            ptl::clear();
+
+          std::cout
+            << __c.esc_tb(2)
+            << "chat"
+            << __c.esc_c()
+            << ": Добро пожаловать "
+            << __user[chat::ID-1].get_user_name()
+            << "..."
+            << std::endl;
+
+          do
+            {
+              std::cout << std::endl;
+              chat::check_out_message(__user);
+              __user[chat::ID-1].out_user_name();
+              __parametr = chat::in_record_message(__user);
+            }
+          while (__parametr == chat::_Ok);
+
+          if (__parametr == chat::_Quit) // Завершение работы чата
+            {
+              std::cout << std::endl;
+              std::cout
+                << __c.esc_tb(2)
+                << "chat"
+                << __c.esc_c()
+                << ": До новых встреч "
+                << __user[chat::ID-1].get_user_name()
+                << "..."
+                << std::endl;
+              __flag = false;
+            }
+
+          if (__parametr == chat::_Change) // Смена пользователя
+            {
+
+            }
+
+          if (__parametr == chat::_Help) // Помощь
+            {
+              ptl::clear();
+              chat::get_info();
+            }
+
+        }
     }
   catch (std::exception& __ex)
     {
@@ -128,8 +156,6 @@ namespace chat
   auto
   get_info() -> void
   {
-    ptl::clear();
-
     std::cout
       << "tchat 1.0 Терминальный чат.\n"
       << "Использование:\n"
@@ -138,10 +164,10 @@ namespace chat
       << "ч: [сообщение для пользователя]\n\n"
       << "Управляющие параметры:\n"
       << "  --all   сообщение для всех пользователей чата\n"
+      << "  -h, -?  вызов информации о параметрах чата\n"
       << "  -c      сменить пользователя чата\n"
       << "  -q      завершить работу чата\n"
       //<< "  -e      редактировать данные пользователя чата\n"
-      //<< "  -h, -?  вызов информации о параметрах чата\n"
       << std::endl;
   }
 
@@ -346,7 +372,7 @@ namespace chat
    * которого она предназначена.
    */
   auto
-  in_record_message(ptl::pvector<chat::User>& __user) -> void
+  in_record_message(ptl::pvector<chat::User>& __user) -> ptl::__u16
   {
     ptl::pcolor __c;
 
@@ -358,47 +384,18 @@ namespace chat
     /** Обработка введенных управляющих параметров.
      */
     if (__whom == "-q") // Завершение работы чата
-      {
-        std::cout << std::endl;
-        std::cout
-          << __c.esc_tb(2)
-          << "chat"
-          << __c.esc_c()
-          << ": До новых встреч..."
-          << std::endl;
-        exit(0);
-      }
-    else if (__whom == "-c") // Смена пользователя
-      {
-        chat::get_info();
+      return chat::_Quit;
 
-        /** Запускаем процедуру авторизации / регистрации пользователя.
-         */
-        chat::user_authorization(__user);
+    if (__whom == "-c") // Смена пользователя
+      return chat::_Change;
 
-        /** Приглашаем авторизовавшегося / зарегистрировавшегося 
-         *  пользователя к дальнейшей работе в чате.
-         */      
-        chat::get_info();
-        std::cout
-          << __c.esc_tb(2)
-          << "chat"
-          << __c.esc_c()
-          << ": Добро пожаловать "
-          << __user[chat::ID-1].get_user_name()
-          << "..."
-          << std::endl;
-
-          std::cout << std::endl;
-          chat::check_out_message(__user);
-          __user[chat::ID-1].out_user_name();
-          chat::in_record_message(__user);
-      }
+    if (__whom == "-h" || __whom == "-?") // Помощь
+      return chat::_Help;
 
     std::string __what{ }; // Текст сообщения
     std::cout << "ч: ";
     std::cin.clear();
-    std::cin >> __what;
+    std::getline(std::cin, __what);
 
     /** Проверка логина и запись сообщения.
      */
@@ -427,6 +424,7 @@ namespace chat
       }
 
     std::cin.ignore(INT_MAX, '\n');
+    return chat::_Ok;
   }
 
 } // namespace chat
