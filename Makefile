@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS =-c
 LDFLAGS=
-SOURCES=main.cpp user.cpp
+SOURCES=main.cpp 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=tchat
 
