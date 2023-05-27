@@ -46,6 +46,10 @@ namespace chat
              const std::string&, ptl::__u32) -> void;
 
     auto
+    set_user_password(const std::string& __password_new) -> void
+    { _M_password = __password_new; }
+
+    auto
     get_user_name() -> std::string
     { return _M_name; }
 
