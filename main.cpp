@@ -34,6 +34,8 @@ namespace chat
   check_out_message(ptl::pvector<chat::User>&) -> void;
   auto
   in_record_message(ptl::pvector<chat::User>&) -> ptl::__u16;
+  auto
+  user_edit(ptl::pvector<chat::User>&) -> void;
 
 } // namespace chat 
 
@@ -101,6 +103,8 @@ __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
             << "..."
             << std::endl;
 
+          /** Процесс обмена сообщениями.
+           */
           do
             {
               std::cout << std::endl;
@@ -110,7 +114,36 @@ __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
             }
           while (__parametr == chat::_Ok);
 
-          if (__parametr == chat::_Quit) // Завершение работы чата
+          /**  Обработка управляющих параметров чата.
+           */
+
+          /** Помощь.
+           */
+          if (__parametr == chat::_Help) 
+            {
+              ptl::clear();
+              chat::get_info();
+            }
+
+          /** Смена пользователя.
+           */
+          if (__parametr == chat::_Change) 
+            {
+              ptl::clear();
+              chat::user_authorization(__user);
+            }
+
+          /** Редактирование данных пользователя.
+           */
+          if (__parametr == chat::_Edit) 
+            {
+              //ptl::clear();
+              chat::user_edit(__user);
+            }
+
+          /** Завершение работы чата.
+           */
+          if (__parametr == chat::_Quit) 
             {
               std::cout << std::endl;
               std::cout
@@ -123,19 +156,6 @@ __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
                 << std::endl;
               __flag = false;
             }
-
-          if (__parametr == chat::_Change) // Смена пользователя
-            {
-              ptl::clear();
-              chat::user_authorization(__user);
-            }
-
-          if (__parametr == chat::_Help) // Помощь
-            {
-              ptl::clear();
-              chat::get_info();
-            }
-
         }
     }
   catch (std::exception& __ex)
@@ -166,7 +186,7 @@ namespace chat
       << "Параметры:\n"
       << "  -h, -?  вызов информации о параметрах чата\n"
       << "  -c      сменить пользователя чата\n"
-      //<< "  -e      редактировать данные пользователя чата\n"
+      << "  -e      редактировать данные пользователя чата\n"
       << "  -q      завершить работу чата\n"
       << "  --all   сообщение для всех пользователей чата\n"
       << std::endl;
@@ -196,8 +216,7 @@ namespace chat
     /** Ввод логина пользователя.
      */
     std::cout
-      << "Логин:"
-      << std::endl;
+      << "Логин: ";
 
     std::cout << __c.esc_tb(7);
     std::cin.clear();
@@ -227,8 +246,7 @@ namespace chat
         /** Ввод пароля пользователя.
          */
         std::cout
-          << "Пароль:"
-          << std::endl;
+          << "Пароль: ";
 
         std::cout << __c.esc_tb(7);
         std::cin.clear();
@@ -247,8 +265,7 @@ namespace chat
               << std::endl;
 
             std::cout
-              << "Пароль:"
-              << std::endl;
+              << "Пароль: ";
 
             std::cout << __c.esc_tb(7);
             std::cin.clear();
@@ -279,8 +296,7 @@ namespace chat
           << std::endl;
 
         std::cout
-          << "Имя:"
-          << std::endl;
+          << "Имя: ";
         std::cout << __c.esc_tb(7);
         std::cin.clear();
         std::cin >> __name;
@@ -292,8 +308,7 @@ namespace chat
         do
           {
             std::cout
-              << "Логин:"
-              << std::endl;
+              << "Логин: ";
             std::cout << __c.esc_tb(7);
             std::cin.clear();
             std::cin >> __login;
@@ -319,8 +334,7 @@ namespace chat
         while (!__flag);
 
         std::cout
-          << "Пароль:"
-          << std::endl;
+          << "Пароль: ";
         std::cout << __c.esc_tb(7);
         std::cin.clear();
         std::cin >> __password;
@@ -388,14 +402,17 @@ namespace chat
 
     /** Обработка введенных управляющих параметров.
      */
-    if (__whom == "-q") // Завершение работы чата
-      return chat::_Quit;
+    if (__whom == "-h" || __whom == "-?") // Помощь
+      return chat::_Help;
 
     if (__whom == "-c") // Смена пользователя
       return chat::_Change;
 
-    if (__whom == "-h" || __whom == "-?") // Помощь
-      return chat::_Help;
+    if (__whom == "-e") // Редактирование данных пользователя
+      return chat::_Edit;
+
+    if (__whom == "-q") // Завершение работы чата
+      return chat::_Quit;
 
     std::cout << "ч: ";
     std::cin.ignore(INT_MAX, '\n');
@@ -428,6 +445,73 @@ namespace chat
       }
 
     return chat::_Ok;
+  }
+
+  /*
+   * Функция редактирует данные пользователя.
+   * Редактирование заключается в смене пароля пользователя.
+   */
+  auto
+  user_edit(ptl::pvector<chat::User>& __user) -> void
+  {
+    std::string __password_old{ };
+    std::string __password_new{ };
+
+    ptl::pcolor __c;
+
+    std::cout
+      << '\n'
+      << __c.esc_tb(2)
+      << "chat"
+      << __c.esc_c()
+      << ": Редактирование данных пользователя "
+      << __user[chat::ID-1].get_user_name()
+      << "..."
+      << std::endl;
+
+    /** Запрос старого пароля пользователя.
+     */
+    std::cout
+      << "Старый пароль: ";
+
+    std::cout << __c.esc_tb(7);
+    std::cin.clear();
+    std::cin >> __password_old;
+    std::cout << __c.esc_c();
+
+    /** Проверка введенного пароля на идентичность.
+     */
+    while (__user[chat::ID-1].get_user_password() != __password_old)
+      {
+        std::cout
+          << __c.esc_tb(2)
+          << "\nchat"
+          << __c.esc_c()
+          << ": Пароль введен не верно..."
+          << std::endl;
+
+        std::cout
+          << "Старый пароль: ";
+
+        std::cout << __c.esc_tb(7);
+        std::cin.clear();
+        std::cin >> __password_old;
+        std::cout << __c.esc_c();
+      }
+
+    /** Запрос нового пароля пользователя.
+     */
+    std::cout
+      << "Новый пароль: ";
+
+    std::cout << __c.esc_tb(7);
+    std::cin.clear();
+    std::cin >> __password_new;
+    std::cout << __c.esc_c();
+    
+    /** Отписываем в хранилище измененные данные пользователя.
+     */
+    __user[chat::ID-1].set_user_password(__password_new);
   }
 
 } // namespace chat
