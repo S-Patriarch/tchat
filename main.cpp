@@ -377,9 +377,11 @@ namespace chat
   auto
   in_record_message(ptl::pvector<chat::User>& __user) -> ptl::__u16
   {
+    std::string __whom{ }; // Кому предназначено сообщение
+    std::string __what{ }; // Текст сообщения
+
     ptl::pcolor __c;
 
-    std::string __whom{ }; // Кому предназначено сообщение
     std::cout << "\nк: ";
     std::cin.clear();
     std::cin >> __whom;
@@ -395,9 +397,8 @@ namespace chat
     if (__whom == "-h" || __whom == "-?") // Помощь
       return chat::_Help;
 
-    std::string __what{ }; // Текст сообщения
     std::cout << "ч: ";
-    std::cin.clear();
+    std::cin.ignore(INT_MAX, '\n');
     std::getline(std::cin, __what);
 
     /** Проверка логина и запись сообщения.
@@ -426,7 +427,6 @@ namespace chat
           }
       }
 
-    std::cin.ignore(INT_MAX, '\n');
     return chat::_Ok;
   }
 
