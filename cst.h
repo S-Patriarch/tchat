@@ -27,6 +27,9 @@ namespace chat
   _Quit   { 30 };
 
   constexpr ptl::__u16
+  _Edit   { 40 };
+
+  constexpr ptl::__u16
   _Ok     { 1000 };
 
 } // namespace chat 
