@@ -3,9 +3,11 @@
 /*
  * Copyright (c) S-Patriarch, 2023
  *
- * Итоговый проект по модулю 'Основные конструкции С++'
- * курса 'Разработчик С++'.
- * Терминальный (консольный) чат.
+ * Терминальный чат.
+ *
+ * Итоговый проект по блоку 'Основные конструкции С++'
+ * курса SkillFactory 'Разработчик на С++'.
+ *
  */
 
 #include "cst.h"
@@ -28,12 +30,16 @@ namespace chat
    */
   auto
   get_info() -> void;
+
   auto
   user_authorization(ptl::pvector<chat::User>&) -> void;
+
   auto
   check_out_message(ptl::pvector<chat::User>&) -> void;
+
   auto
   in_record_message(ptl::pvector<chat::User>&) -> ptl::__u16;
+
   auto
   user_edit(ptl::pvector<chat::User>&) -> void;
 
@@ -61,19 +67,6 @@ main() -> int
        */
       __user[chat::ID].set_user("Patriarch", "Patriarch", 
                                 "Patriarch", chat::ID+1);
-
-//-------------------------------------------------------
-// Ручное формирование хранилища пользователей
-//
-__user.resize(__user.size() + 1);
-chat::ID = __user.size();
-__user[chat::ID-1].set_user("Chaos", "Chaos", "Chaos", chat::ID);
-__user.resize(__user.size() + 1);
-chat::ID = __user.size();
-__user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
-//
-//
-//-------------------------------------------------------
 
       ptl::clear();
       chat::get_info();
@@ -136,10 +129,7 @@ __user[chat::ID-1].set_user("Alex", "Alex", "Alex", chat::ID);
           /** Редактирование данных пользователя.
            */
           if (__parametr == chat::_Edit) 
-            {
-              //ptl::clear();
-              chat::user_edit(__user);
-            }
+            chat::user_edit(__user);
 
           /** Завершение работы чата.
            */
@@ -182,7 +172,7 @@ namespace chat
       << "Использование:\n"
       << "  User\n"
       << "  к: [имя пользователя] или [параметр]\n"
-      << "  ч: [сообщение для пользователя]\n\n"
+      << "  ч: [сообщение для пользователя] или [параметр]\n\n"
       << "Параметры:\n"
       << "  -h, -?  вызов информации о параметрах чата\n"
       << "  -c      сменить пользователя чата\n"
@@ -205,6 +195,8 @@ namespace chat
     std::string __password{ };
 
     ptl::pcolor __c;
+
+    chat::ID = 0;
 
     std::cout
       << __c.esc_tb(2)
@@ -402,21 +394,35 @@ namespace chat
 
     /** Обработка введенных управляющих параметров.
      */
-    if (__whom == "-h" || __whom == "-?") // Помощь
+    if (__whom == "-h" || __whom == "-?")
       return chat::_Help;
 
-    if (__whom == "-c") // Смена пользователя
+    if (__whom == "-c")
       return chat::_Change;
 
-    if (__whom == "-e") // Редактирование данных пользователя
+    if (__whom == "-e")
       return chat::_Edit;
 
-    if (__whom == "-q") // Завершение работы чата
+    if (__whom == "-q")
       return chat::_Quit;
 
     std::cout << "ч: ";
     std::cin.ignore(INT_MAX, '\n');
     std::getline(std::cin, __what);
+
+    /** Повторная обработка введенных управляющих параметров.
+     */
+    if (__what == "-h" || __what == "-?")
+      return chat::_Help;
+
+    if (__what == "-c")
+      return chat::_Change;
+
+    if (__what == "-e")
+      return chat::_Edit;
+
+    if (__what == "-q")
+      return chat::_Quit;
 
     /** Проверка логина и запись сообщения.
      */
