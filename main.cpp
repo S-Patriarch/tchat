@@ -51,7 +51,7 @@ namespace chat
 auto
 main() -> int
 {
-  ptl::setlocale_WIN32_rus();
+  ptl::setconsole_WIN32_rus();
 
   chat::get_info();
 
@@ -65,8 +65,11 @@ main() -> int
 
       /** Добавляем одного (первого) пользователя с ID:1, чтоб был.
        */
-      __user[chat::ID].set_user("Patriarch", "Patriarch", 
-                                "Patriarch", chat::ID+1);
+      __user[chat::ID].set_user(
+          "Patriarch", 
+          "apsk0529-2@mail.ru", 
+          "QQqq1122+", 
+          chat::ID+1);
 
       ptl::clear();
       chat::get_info();
@@ -225,6 +228,7 @@ namespace chat
             chat::ID = __user[__i].get_user_id();
             __flag   = true;
           }
+
         if (__flag) break;
       }
 
@@ -307,21 +311,20 @@ namespace chat
             std::cout << __c.esc_c();
 
             for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
-              {
-                if (__user[__i].get_user_login() != __login)
-                  __flag = true;
-                else
-                  {
-                    std::cout
-                      << __c.esc_tb(2)
-                      << "\nchat"
-                      << __c.esc_c()
-                      << ": Такой логин уже существует..."
-                      << std::endl;
-                    __flag = false;
-                    break;
-                  }
-              }
+              if (__user[__i].get_user_login() != __login)
+                __flag = true;
+              else
+                {
+                  std::cout
+                    << __c.esc_tb(2)
+                    << "\nchat"
+                    << __c.esc_c()
+                    << ": Такой логин уже существует..."
+                    << std::endl;
+
+                  __flag = false;
+                  break;
+                }
           }
         while (!__flag);
 
@@ -363,14 +366,12 @@ namespace chat
         __user[chat::ID-1].clear_msg_quantity();
       }
     else
-      {
-        std::cout
-          << __c.esc_tb(2)
-          << "chat"
-          << __c.esc_c()
-          << ": Для вас нет сообщений..."
-          << std::endl;
-      }
+      std::cout
+        << __c.esc_tb(2)
+        << "chat"
+        << __c.esc_c()
+        << ": Для вас нет сообщений..."
+        << std::endl;
   }
 
   /*
@@ -388,64 +389,96 @@ namespace chat
 
     ptl::pcolor __c;
 
-    std::cout << "\nк: ";
-    std::cin.clear();
-    std::cin >> __whom;
+    std::cout << std::endl;
 
-    /** Обработка введенных управляющих параметров.
+    bool __flag{ true };
+    do
+      {
+        /** Ввод имени пользователя для которого преднозначено
+         *  сообщение.
+         */
+        std::cout << "к: ";
+        std::cin.clear();
+        std::cin >> __whom;
+
+        /** Обработка введенных управляющих параметров.
+         */
+        if (__whom == "-h" || __whom == "-H" || __whom == "-?")
+          return chat::_Help;
+
+        if (__whom == "-c" || __whom == "-C")
+          return chat::_Change;
+
+        if (__whom == "-e" || __whom == "-E")
+          return chat::_Edit;
+
+        if (__whom == "-q" || __whom == "-Q")
+          return chat::_Quit;
+
+        /** Проверка введенного имени пользователя на наличие/
+         */
+        if (__whom == "--all")
+          __flag = false;
+        else
+          for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+            if (__user[__i].get_user_name() == __whom)
+              {
+                __flag = false;
+                break;
+              }
+
+        if (__flag == true)
+          std::cout
+            << __c.esc_tb(2)
+            << "chat"
+            << __c.esc_c()
+            << ": Пользователя с таким именем нет..."
+            << std::endl;            
+      }
+    while (__flag);
+
+    /** Ввод сообщения.
      */
-    if (__whom == "-h" || __whom == "-?")
-      return chat::_Help;
-
-    if (__whom == "-c")
-      return chat::_Change;
-
-    if (__whom == "-e")
-      return chat::_Edit;
-
-    if (__whom == "-q")
-      return chat::_Quit;
-
     std::cout << "ч: ";
     std::cin.ignore(INT_MAX, '\n');
     std::getline(std::cin, __what);
 
     /** Повторная обработка введенных управляющих параметров.
      */
-    if (__what == "-h" || __what == "-?")
+    if (__what == "-h" || __what == "-H" || __what == "-?")
       return chat::_Help;
 
-    if (__what == "-c")
+    if (__what == "-c" || __what == "-C")
       return chat::_Change;
 
-    if (__what == "-e")
+    if (__what == "-e" || __what == "-E")
       return chat::_Edit;
 
-    if (__what == "-q")
+    if (__what == "-q" || __what == "-Q")
       return chat::_Quit;
 
     /** Проверка логина и запись сообщения.
      */
     if (__whom == "--all")
-      {
-        for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
-          {
-            if (__user[__i].get_user_name() != __user[chat::ID-1].get_user_name())
-              __user[__i].record_message(__user[chat::ID-1].get_user_name(), 
-                                         __what);
-          }
-      }
+      for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+          if (__user[__i].get_user_name() != __user[chat::ID-1].get_user_name())
+            __user[__i].record_message(
+                __user[chat::ID-1].get_user_name(), 
+                __what);
     else 
       {
+        bool __flag{ false };
         for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
           {
-            bool __flag{ false };
             if (__user[__i].get_user_name() == __whom)
               {
-                __user[__i].record_message(__user[chat::ID-1].get_user_name(), 
-                                           __what);
+                __user[__i].record_message(
+                    __user[chat::ID-1].get_user_name(), 
+                    __what);
+
                 __flag = true;
               }
+
             if (__flag) break;
           }
       }
