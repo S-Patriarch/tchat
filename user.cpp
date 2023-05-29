@@ -13,8 +13,11 @@
 namespace chat
 {
   auto
-  User::set_user(const std::string& __name, const std::string& __login, 
-                 const std::string& __password, ptl::__u32 __id) -> void
+  User::set_user(
+    const std::string& __name, 
+    const std::string& __login, 
+    const std::string& __password, 
+    ptl::__u32         __id) -> void
   {
     _M_name     = __name;
     _M_login    = __login;
@@ -33,8 +36,9 @@ namespace chat
   }
 
   auto
-  User::record_message(const std::string& __whom, 
-                       const std::string& __what) -> void
+  User::record_message(
+    const std::string& __whom, 
+    const std::string& __what) -> void
   {
     __msg[_M_msg_quantity]._S_name = __whom;
     __msg[_M_msg_quantity]._S_msg  = __what;
