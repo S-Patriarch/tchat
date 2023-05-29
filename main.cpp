@@ -132,7 +132,9 @@ main() -> int
           /** Редактирование данных пользователя.
            */
           if (__parametr == chat::_Edit) 
-            chat::user_edit(__user);
+            {
+              chat::user_edit(__user);
+            }
 
           /** Завершение работы чата.
            */
@@ -291,16 +293,43 @@ namespace chat
           << ": Регистрация пользователя..."
           << std::endl;
 
-        std::cout
-          << "Имя: ";
-        std::cout << __c.esc_tb(7);
-        std::cin.clear();
-        std::cin >> __name;
-        std::cout << __c.esc_c();
+        /** Ввод имени и его проверка на наличие.
+         */
+        bool __flag{ false };
+        do
+          {
+            std::cout
+              << "Имя: ";
+            std::cout << __c.esc_tb(7);
+            std::cin.clear();
+            std::cin >> __name;
+            std::cout << __c.esc_c();
+
+            for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+              {
+                if (__user[__i].get_user_name() != __name)
+                  {
+                    __flag = true;
+                  }
+                else
+                  {
+                    std::cout
+                      << __c.esc_tb(2)
+                      << "\nchat"
+                      << __c.esc_c()
+                      << ": Такое имя уже существует..."
+                      << std::endl;
+
+                    __flag = false;
+                    break;
+                  }
+              }
+          }
+        while (!__flag);
 
         /** Ввод логина и его проверка на наличие.
          */
-        bool __flag{ false };
+        __flag = false;
         do
           {
             std::cout
@@ -311,20 +340,24 @@ namespace chat
             std::cout << __c.esc_c();
 
             for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
-              if (__user[__i].get_user_login() != __login)
-                __flag = true;
-              else
-                {
-                  std::cout
-                    << __c.esc_tb(2)
-                    << "\nchat"
-                    << __c.esc_c()
-                    << ": Такой логин уже существует..."
-                    << std::endl;
+              {
+                if (__user[__i].get_user_login() != __login)
+                  {
+                    __flag = true;
+                  }
+                else
+                  {
+                    std::cout
+                      << __c.esc_tb(2)
+                      << "\nchat"
+                      << __c.esc_c()
+                      << ": Такой логин уже существует..."
+                      << std::endl;
 
-                  __flag = false;
-                  break;
-                }
+                    __flag = false;
+                    break;
+                  }
+              }
           }
         while (!__flag);
 
@@ -366,12 +399,14 @@ namespace chat
         __user[chat::ID-1].clear_msg_quantity();
       }
     else
-      std::cout
-        << __c.esc_tb(2)
-        << "chat"
-        << __c.esc_c()
-        << ": Для вас нет сообщений..."
-        << std::endl;
+      {
+        std::cout
+          << __c.esc_tb(2)
+          << "chat"
+          << __c.esc_c()
+          << ": Для вас нет сообщений..."
+          << std::endl;
+      }
   }
 
   /*
@@ -418,22 +453,28 @@ namespace chat
         /** Проверка введенного имени пользователя на наличие/
          */
         if (__whom == "--all")
-          __flag = false;
+          {
+            __flag = false;
+          }
         else
           for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
-            if (__user[__i].get_user_name() == __whom)
-              {
-                __flag = false;
-                break;
-              }
+            {
+              if (__user[__i].get_user_name() == __whom)
+                {
+                  __flag = false;
+                  break;
+                }
+            }
 
         if (__flag == true)
-          std::cout
-            << __c.esc_tb(2)
-            << "chat"
-            << __c.esc_c()
-            << ": Пользователя с таким именем нет..."
-            << std::endl;            
+          {
+            std::cout
+              << __c.esc_tb(2)
+              << "chat"
+              << __c.esc_c()
+              << ": Пользователя с таким именем нет..."
+              << std::endl;            
+          }
       }
     while (__flag);
 
@@ -460,11 +501,17 @@ namespace chat
     /** Проверка логина и запись сообщения.
      */
     if (__whom == "--all")
-      for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
-          if (__user[__i].get_user_name() != __user[chat::ID-1].get_user_name())
-            __user[__i].record_message(
-                __user[chat::ID-1].get_user_name(), 
-                __what);
+      {
+        for (ptl::__u32 __i{0}; __i < __user.size(); ++__i)
+          {
+            if (__user[__i].get_user_name() != __user[chat::ID-1].get_user_name())
+              {
+                __user[__i].record_message(
+                    __user[chat::ID-1].get_user_name(), 
+                    __what);
+              }
+          }
+      }
     else 
       {
         bool __flag{ false };
