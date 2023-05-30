@@ -12,10 +12,10 @@
 
 #include "cst.h"
 #include "user.h"
-#include "/home/chaos/c++/ptl/ptype.h"
-#include "/home/chaos/c++/ptl/pconio.h"
-#include "/home/chaos/c++/ptl/pcolor.h"
-#include "/home/chaos/c++/ptl/pvector.h"
+#include "ptype.h"
+#include "pconio.h"
+#include "pcolor.h"
+#include "pvector.h"
 #include <iostream>
 #include <exception>
 #include <string>

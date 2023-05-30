@@ -5,8 +5,8 @@
  */
 
 #include "user.h"
-#include "/home/chaos/c++/ptl/ptype.h"
-#include "/home/chaos/c++/ptl/pcolor.h"
+#include "ptype.h"
+#include "pcolor.h"
 #include <iostream>
 #include <string>
 
