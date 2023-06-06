@@ -11,7 +11,7 @@
  */
 
 #pragma once
-#ifndef _PTL_PCONIO
+#if !defined(_PTL_PCONIO)
 #define _PTL_PCONIO
 
 #include <iostream>
@@ -20,6 +20,13 @@
 #include <clocale>
 #include <windows.h>
 #endif
+
+/*
+ * Функции:
+ *   - clear() - очистка терминала
+ *   - setlocale_WIN32_rus() - локализация консоли ОС Windows для вывода
+ *   - setconsole_WIN32_rus() - локализация консоли ОС Windows для ввода/вывода
+ */
 
 namespace ptl
 {
