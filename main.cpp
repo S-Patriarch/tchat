@@ -12,10 +12,19 @@
 
 #include "cst.h"
 #include "user.h"
-#include "ptype.h"
-#include "pconio.h"
-#include "pcolor.h"
-#include "pvector.h"
+
+#ifdef _WIN32
+#include "ptl\ptype.h"
+#include "ptl\pconio.h"
+#include "ptl\pcolor.h"
+#include "ptl\pvector.h"
+#else
+#include "ptl/ptype.h"
+#include "ptl/pconio.h"
+#include "ptl/pcolor.h"
+#include "ptl/pvector.h"
+#endif
+
 #include <iostream>
 #include <exception>
 #include <string>

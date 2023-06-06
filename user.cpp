@@ -5,8 +5,15 @@
  */
 
 #include "user.h"
-#include "ptype.h"
-#include "pcolor.h"
+
+#ifdef _WIN32
+#include "ptl\ptype.h"
+#include "ptl\pcolor.h"
+#else
+#include "ptl/ptype.h"
+#include "ptl/pcolor.h"
+#endif
+
 #include <iostream>
 #include <string>
 

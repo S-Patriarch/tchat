@@ -10,7 +10,11 @@
 #ifndef _CHAT_CST
 #define _CHAT_CST
 
-#include "ptype.h"
+#ifdef _WIN32
+#include "ptl\ptype.h"
+#else
+#include "ptl/ptype.h"
+#endif
 
 namespace chat
 {
