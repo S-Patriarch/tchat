@@ -80,7 +80,7 @@ main() -> int
           "QQqq1122+", 
           chat::ID+1);
 
-      ptl::clear();
+      ptl::clrscr();
       chat::get_info();
 
       /** Запускаем процедуру авторизации / регистрации пользователя.
@@ -97,7 +97,7 @@ main() -> int
            */
 
           if (__parametr != chat::_Help)
-            ptl::clear();
+            ptl::clrscr();
 
           std::cout
             << __c.esc_tb(2)
@@ -126,7 +126,7 @@ main() -> int
            */
           if (__parametr == chat::_Help) 
             {
-              ptl::clear();
+              ptl::clrscr();
               chat::get_info();
             }
 
@@ -134,7 +134,7 @@ main() -> int
            */
           if (__parametr == chat::_Change) 
             {
-              ptl::clear();
+              ptl::clrscr();
               chat::user_authorization(__user);
             }
 
