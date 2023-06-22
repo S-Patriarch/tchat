@@ -37,20 +37,11 @@ namespace chat
 
   /** Определение функций.
    */
-  auto
-  get_info() -> void;
-
-  auto
-  user_authorization(ptl::pvector<chat::User>&) -> void;
-
-  auto
-  check_out_message(ptl::pvector<chat::User>&) -> void;
-
-  auto
-  in_record_message(ptl::pvector<chat::User>&) -> ptl::__u16;
-
-  auto
-  user_edit(ptl::pvector<chat::User>&) -> void;
+  auto get_info() -> void;
+  auto user_authorization(ptl::pvector<chat::User>&) -> void;
+  auto check_out_message(ptl::pvector<chat::User>&) -> void;
+  auto in_record_message(ptl::pvector<chat::User>&) -> ptl::__u16;
+  auto user_edit(ptl::pvector<chat::User>&) -> void;
 
 } // namespace chat 
 
@@ -100,7 +91,7 @@ main() -> int
             ptl::clrscr();
 
           std::cout
-            << __c.esc_tb(2)
+            << __c.esc_tb( ptl::GREEN )
             << "chat"
             << __c.esc_c()
             << ": Добро пожаловать "
@@ -151,7 +142,7 @@ main() -> int
             {
               std::cout << std::endl;
               std::cout
-                << __c.esc_tb(2)
+                << __c.esc_tb( ptl::GREEN )
                 << "chat"
                 << __c.esc_c()
                 << ": До новых встреч "
@@ -213,7 +204,7 @@ namespace chat
     chat::ID = 0;
 
     std::cout
-      << __c.esc_tb(2)
+      << __c.esc_tb( ptl::GREEN )
       << "chat"
       << __c.esc_c()
       << ": Авторизация пользователя..."
@@ -224,7 +215,7 @@ namespace chat
     std::cout
       << "Логин: ";
 
-    std::cout << __c.esc_tb(7);
+    std::cout << __c.esc_tb( ptl::WHITE );
     std::cin.clear();
     std::cin >> __login;
     std::cout << __c.esc_c();
@@ -255,7 +246,7 @@ namespace chat
         std::cout
           << "Пароль: ";
 
-        std::cout << __c.esc_tb(7);
+        std::cout << __c.esc_tb( ptl::WHITE );
         std::cin.clear();
         std::cin >> __password;
         std::cout << __c.esc_c();
@@ -265,7 +256,7 @@ namespace chat
         while (__user[chat::ID-1].get_user_password() != __password)
           {
             std::cout
-              << __c.esc_tb(2)
+              << __c.esc_tb( ptl::GREEN )
               << "\nchat"
               << __c.esc_c()
               << ": Пароль введен не верно..."
@@ -274,7 +265,7 @@ namespace chat
             std::cout
               << "Пароль: ";
 
-            std::cout << __c.esc_tb(7);
+            std::cout << __c.esc_tb( ptl::WHITE );
             std::cin.clear();
             std::cin >> __password;
             std::cout << __c.esc_c();
@@ -288,7 +279,7 @@ namespace chat
          */
 
         std::cout
-          << __c.esc_tb(2)
+          << __c.esc_tb( ptl::GREEN )
           << "\nchat"
           << __c.esc_c()
           << ": Пользователь с таким логином не зарегистрирован.\n"
@@ -296,7 +287,7 @@ namespace chat
           << std::endl;
 
         std::cout
-          << __c.esc_tb(2)
+          << __c.esc_tb( ptl::GREEN )
           << "\nchat"
           << __c.esc_c()
           << ": Регистрация пользователя..."
@@ -309,7 +300,7 @@ namespace chat
           {
             std::cout
               << "Имя: ";
-            std::cout << __c.esc_tb(7);
+            std::cout << __c.esc_tb( ptl::WHITE );
             std::cin.clear();
             std::cin >> __name;
             std::cout << __c.esc_c();
@@ -323,7 +314,7 @@ namespace chat
                 else
                   {
                     std::cout
-                      << __c.esc_tb(2)
+                      << __c.esc_tb( ptl::GREEN )
                       << "\nchat"
                       << __c.esc_c()
                       << ": Такое имя уже существует..."
@@ -343,7 +334,7 @@ namespace chat
           {
             std::cout
               << "Логин: ";
-            std::cout << __c.esc_tb(7);
+            std::cout << __c.esc_tb( ptl::WHITE );
             std::cin.clear();
             std::cin >> __login;
             std::cout << __c.esc_c();
@@ -357,7 +348,7 @@ namespace chat
                 else
                   {
                     std::cout
-                      << __c.esc_tb(2)
+                      << __c.esc_tb( ptl::GREEN )
                       << "\nchat"
                       << __c.esc_c()
                       << ": Такой логин уже существует..."
@@ -372,7 +363,7 @@ namespace chat
 
         std::cout
           << "Пароль: ";
-        std::cout << __c.esc_tb(7);
+        std::cout << __c.esc_tb( ptl::WHITE );
         std::cin.clear();
         std::cin >> __password;
         std::cout << __c.esc_c();
@@ -398,7 +389,7 @@ namespace chat
     if (__user[chat::ID-1].get_msg_quantity() != 0)
       {
         std::cout
-          << __c.esc_tb(2)
+          << __c.esc_tb( ptl::GREEN )
           << "chat"
           << __c.esc_c()
           << ": Для вас есть сообщения..."
@@ -410,7 +401,7 @@ namespace chat
     else
       {
         std::cout
-          << __c.esc_tb(2)
+          << __c.esc_tb( ptl::GREEN )
           << "chat"
           << __c.esc_c()
           << ": Для вас нет сообщений..."
@@ -478,7 +469,7 @@ namespace chat
         if (__flag == true)
           {
             std::cout
-              << __c.esc_tb(2)
+              << __c.esc_tb( ptl::GREEN )
               << "chat"
               << __c.esc_c()
               << ": Пользователя с таким именем нет..."
@@ -556,7 +547,7 @@ namespace chat
 
     std::cout
       << '\n'
-      << __c.esc_tb(2)
+      << __c.esc_tb( ptl::GREEN )
       << "chat"
       << __c.esc_c()
       << ": Редактирование данных пользователя "
@@ -569,7 +560,7 @@ namespace chat
     std::cout
       << "Старый пароль: ";
 
-    std::cout << __c.esc_tb(7);
+    std::cout << __c.esc_tb( ptl::WHITE );
     std::cin.clear();
     std::cin >> __password_old;
     std::cout << __c.esc_c();
@@ -579,7 +570,7 @@ namespace chat
     while (__user[chat::ID-1].get_user_password() != __password_old)
       {
         std::cout
-          << __c.esc_tb(2)
+          << __c.esc_tb( ptl::GREEN )
           << "\nchat"
           << __c.esc_c()
           << ": Пароль введен не верно..."
@@ -588,7 +579,7 @@ namespace chat
         std::cout
           << "Старый пароль: ";
 
-        std::cout << __c.esc_tb(7);
+        std::cout << __c.esc_tb( ptl::WHITE );
         std::cin.clear();
         std::cin >> __password_old;
         std::cout << __c.esc_c();
@@ -599,7 +590,7 @@ namespace chat
     std::cout
       << "Новый пароль: ";
 
-    std::cout << __c.esc_tb(7);
+    std::cout << __c.esc_tb( ptl::WHITE );
     std::cin.clear();
     std::cin >> __password_new;
     std::cout << __c.esc_c();

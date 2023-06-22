@@ -37,7 +37,7 @@ namespace chat
   {
     ptl::pcolor __c;
     std::cout
-      << __c.esc_tb(7)
+      << __c.esc_tb( ptl::WHITE )
       << _M_name
       << __c.esc_c();
   }
@@ -61,7 +61,7 @@ namespace chat
     for (ptl::__u16 __index{0}; __index < _M_msg_quantity; ++__index)
       {
         std::cout
-          << __c.esc_tb(6)
+          << __c.esc_tb( ptl::CYAN )
           << __msg[__index]._S_name
           << __c.esc_c()
           << ": "
